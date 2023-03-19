@@ -266,13 +266,13 @@ def serverJ(title: str, content: str) -> None:
     if not push_config.get("PUSH_KEY"):
         print("serverJ 服务的 PUSH_KEY 未设置!!\n取消推送")
         return
-    print("serverJ 服务启动")
-
+    print("serverJ 服务启动")    
+    
     data = {"text": title, "desp": content.replace("\n", "\n\n")}
-    if push_config.get("PUSH_KEY").index("SCT") != -1:
+    if push_config.get("PUSH_KEY").find("SCT") != -1: #index -> find, 不然，如果没找到，会抛异常，而不是返回 -1
         url = f'https://sctapi.ftqq.com/{push_config.get("PUSH_KEY")}.send'
     else:
-        url = f'https://sc.ftqq.com/${push_config.get("PUSH_KEY")}.send'
+        url = f'https://sc.ftqq.com/{push_config.get("PUSH_KEY")}.send' #python 中格式化字符不需要 $ 符号，不然会当作多余字符添加进去
     response = requests.post(url, data=data).json()
 
     if response.get("errno") == 0 or response.get("code") == 0:
